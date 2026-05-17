@@ -43,6 +43,14 @@ public class IniFile : IIniFile
     #endregion
 
     /// <summary>
+    /// Gets or sets a value that determines whether reading from or writing to a file
+    /// named "desktop.ini" (in any directory) is forbidden. When set to <see langword="true"/>,
+    /// any such attempt throws an <see cref="InvalidOperationException"/>.
+    /// Defaults to <see langword="false"/>.
+    /// </summary>
+    public static bool DisallowDesktopIni { get; set; } = false;
+
+    /// <summary>
     /// Creates a new INI file instance.
     /// </summary>
     public IniFile() { }
@@ -115,6 +123,8 @@ public class IniFile : IIniFile
 
     public void Parse(bool applyBaseIni = true)
     {
+        ThrowIfDesktopIniDisallowed(FileName);
+
         FileInfo fileInfo = SafePath.GetFile(FileName);
 
         if (!fileInfo.Exists)
@@ -134,6 +144,16 @@ public class IniFile : IIniFile
         Sections.Clear();
 
         Parse();
+    }
+
+    private static void ThrowIfDesktopIniDisallowed(string filePath)
+    {
+        if (DisallowDesktopIni &&
+            string.Equals(Path.GetFileName(filePath), "desktop.ini", StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidOperationException(
+                $"Access to desktop.ini files is not allowed. Path: {filePath}");
+        }
     }
 
     private void ParseIniFile(Stream stream, Encoding encoding = null, bool applyBaseIni = true)
@@ -302,6 +322,8 @@ public class IniFile : IIniFile
     /// <param name="filePath">The path of the file to write to.</param>
     public void WriteIniFile(string filePath)
     {
+        ThrowIfDesktopIniDisallowed(filePath);
+
         FileInfo fileInfo = SafePath.GetFile(filePath);
 
         if (fileInfo.Exists)
