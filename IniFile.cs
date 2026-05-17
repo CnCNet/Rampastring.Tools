@@ -152,7 +152,7 @@ public class IniFile : IIniFile
             string.Equals(Path.GetFileName(filePath), "desktop.ini", StringComparison.OrdinalIgnoreCase))
         {
             throw new InvalidOperationException(
-                $"Access to desktop.ini files is not allowed (path: {filePath}).");
+                $"Access to desktop.ini files is not allowed. Path: {filePath}");
         }
     }
 
