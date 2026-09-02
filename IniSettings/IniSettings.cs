@@ -60,6 +60,16 @@ public class IniSettings
     }
 
     /// <summary>
+    /// Overrides the default values of this instance's settings with values loaded from the provided INI file.
+    /// If a specific setting's value is not found from the INI file, the setting keeps its existing default value.
+    /// </summary>
+    public virtual void LoadDefaultValueOverrides(IniFile defaultSettingsIni)
+    {
+        foreach (var setting in settingList)
+            setting.LoadDefaultValueOverride(defaultSettingsIni);
+    }
+
+    /// <summary>
     /// Writes the potential user-defined values of all settings registered into this instance into the INI file.
     /// Does not write the INI settings file itself; for that, call <see cref="SaveSettingsIni"/> afterwards.
     /// </summary>

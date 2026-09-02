@@ -2,6 +2,7 @@
 
 public interface IIniLoadable
 {
+    void LoadDefaultValueOverride(IniFile iniFile);
     void LoadValue(IniFile iniFile);
     void WriteValue(IniFile iniFile, bool force);
 }
@@ -26,7 +27,7 @@ public abstract class SettingBase<T> : ISetting<T>
 
     public string Section { get; }
     public string Key { get; }
-    public T DefaultValue { get; }
+    public T DefaultValue { get; private set; }
 
     public bool HasUserDefinedValue { get; private set; }
 
@@ -50,6 +51,14 @@ public abstract class SettingBase<T> : ISetting<T>
     }
 
     public static implicit operator T(SettingBase<T> setting) => setting.GetValue();
+
+    public void LoadDefaultValueOverride(IniFile iniFile)
+    {
+        if (!iniFile.KeyExists(Section, Key))
+            return;
+
+        DefaultValue = GetValueFromString(iniFile.GetStringValue(Section, Key, GetValueString(DefaultValue)));
+    }
 
     public void LoadValue(IniFile iniFile)
     {
