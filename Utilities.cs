@@ -89,7 +89,7 @@ public static class Utilities
     /// </summary>
     /// <param name="value">The byte array to convert.</param>
     /// <param name="startIndex">The index of the first byte to convert.</param>
-    /// <param name="length">The number of bytes to convert.</param>
+    /// <param name="length">The number of bytes to convert. Will trim the length if it exceeds the byte array's length.</param>
     /// <param name="capitalize">Indicates whether to capitalize the hexadecimal characters.</param>
     /// <returns>A string that represents the byte array in hexadecimal format, without hyphens.</returns>
     public static string BytesToHexString(byte[] value, int startIndex, int length, bool capitalize = false)
