@@ -98,10 +98,10 @@ public static class Utilities
             return string.Empty;
 
         if (startIndex < 0)
-            throw new ArgumentOutOfRangeException(nameof(startIndex), "Start index cannot be negative.");
+            startIndex = 0;
 
         if (length < 0)
-            throw new ArgumentOutOfRangeException(nameof(length), "Length cannot be negative.");
+            length = 0;
 
         var sb = new StringBuilder();
 
