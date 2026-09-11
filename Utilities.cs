@@ -46,7 +46,7 @@ public static class Utilities
     /// <returns>A string that represents the input string's SHA1.</returns>
     public static string CalculateSHA1ForString(string str)
     {
-        if (string.IsNullOrEmpty(str))
+        if (str is null)
             return string.Empty;
 
         byte[] buffer = Encoding.UTF8.GetBytes(str);
