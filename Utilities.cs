@@ -106,7 +106,7 @@ public static class Utilities
         var sb = new StringBuilder();
 
         string byteFormat = capitalize ? "X2" : "x2";
-        for (int i = startIndex; i < startIndex + length && i < value.Length; i++)
+        for (int i = startIndex; i - startIndex < length && i < value.Length; i++)
         {
             sb.Append(value[i].ToString(byteFormat, CultureInfo.InvariantCulture));
         }
