@@ -127,9 +127,9 @@ public class IniFile : IIniFile
 
     public void Parse(bool applyBaseIni = true)
     {
-        ThrowIfDesktopIniDisallowed(FileName);
+        ThrowIfDesktopIniDisallowed(FilePath);
 
-        FileInfo fileInfo = SafePath.GetFile(FileName);
+        FileInfo fileInfo = SafePath.GetFile(FilePath);
 
         if (!fileInfo.Exists)
             return;
@@ -263,7 +263,7 @@ public class IniFile : IIniFile
         if (!String.IsNullOrEmpty(basedOn))
         {
             // Consolidate with the INI file that this INI file is based on
-            string path = SafePath.CombineFilePath(SafePath.GetFileDirectoryName(FileName), basedOn);
+            string path = SafePath.CombineFilePath(SafePath.GetFileDirectoryName(FilePath), basedOn);
             IniFile baseIni = new IniFile(path);
             ConsolidateIniFiles(baseIni, this);
             Sections = baseIni.Sections;
@@ -272,7 +272,7 @@ public class IniFile : IIniFile
 
     public void WriteIniFile()
     {
-        WriteIniFile(FileName);
+        WriteIniFile(FilePath);
     }
 
     public void WriteIniStream(Stream stream)
