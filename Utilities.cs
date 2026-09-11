@@ -69,7 +69,7 @@ public static class Utilities
     /// <returns>A string that represents the byte array in hexadecimal format, without hyphens.</returns>
     public static string BytesToHexString(byte[] value, bool capitalize = false)
     {
-        return BytesToHexString(value, 0, value.Length, capitalize);
+        return value == null ? string.Empty : BytesToHexString(value, 0, value.Length, capitalize);
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ public static class Utilities
     /// <returns>A string that represents the byte array in hexadecimal format, without hyphens.</returns>
     public static string BytesToHexString(byte[] value, int startIndex, bool capitalize = false)
     {
-        return BytesToHexString(value, startIndex, value.Length - startIndex, capitalize);
+        return value == null ? string.Empty : BytesToHexString(value, startIndex, value.Length - startIndex, capitalize);
     }
 
     /// <summary>
