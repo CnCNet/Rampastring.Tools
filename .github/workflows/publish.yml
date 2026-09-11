@@ -3,6 +3,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+  id-token: write
 jobs:
   publish:
     if: github.repository == 'Rampastring/Rampastring.Tools'
@@ -24,8 +25,14 @@ jobs:
       uses: gittools/actions/gitversion/execute@main
     - name: Pack
       run: dotnet pack Rampastring.Tools.csproj --configuration Release -p:AssemblyVersion=$env:GitVersion_AssemblySemVer -p:FileVersion=$env:GitVersion_AssemblySemFileVer -p:InformationalVersion=$env:GitVersion_InformationalVersion -p:PackageVersion=$env:GitVersion_MajorMinorPatch
+    # Get a short-lived NuGet API key
+    - name: NuGet login (OIDC → temp API key)
+      uses: NuGet/login@v1
+      id: login
+      with:
+        user: ${{ secrets.NUGET_USER }}
     - name: Push
-      run: dotnet nuget push bin\Release\*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push bin\Release\*.nupkg --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
     - name: Prerelease
       if: ${{ env.GitVersion_PreReleaseTag != '' }}
       run: gh release create ${{ format('v{0}', env.GitVersion_SemVer) }} --generate-notes --target ${{ github.sha }} --prerelease

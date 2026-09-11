@@ -157,4 +157,22 @@ public interface IIniSection
     /// replaced with an environment-specific one.
     /// </summary>
     string GetPathStringValue(string key, string defaultValue);
+
+    /// <summary>
+    /// Parses and returns an enum value of a key in the INI section.
+    /// </summary>
+    /// <typeparam name="T">The type of the enum.</typeparam>
+    /// <param name="key">The INI key.</param>
+    /// <param name="defaultValue">The value to return if the INI key doesn't exist
+    /// or has no valid value that would belong to the enum type.</param>
+    T GetEnumValue<T>(string key, T defaultValue) where T : struct, Enum;
+
+    /// <summary>
+    /// Sets the enum value of a key in the INI section.
+    /// If the key does not exist, it is created.
+    /// </summary>
+    /// <typeparam name="T">The type of the enum.</typeparam>
+    /// <param name="key">The INI key.</param>
+    /// <param name="value">The value of the INI key.</param>
+    void SetEnumValue<T>(string key, T value) where T : struct, Enum;
 }
