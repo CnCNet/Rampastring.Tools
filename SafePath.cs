@@ -97,30 +97,34 @@ public static class SafePath
     {
         if (paths is null)
             return null;
-
-        paths = paths.Where(p => !string.IsNullOrWhiteSpace(p)).ToArray();
-
-        if (!paths.Any())
+    
+        string[] normalizedPaths = paths
+            .Where(path => !string.IsNullOrWhiteSpace(path))
+            .Select(GetPath)
+            .ToArray();
+    
+        if (normalizedPaths.Length == 0)
             return null;
-
-        if (paths.Length == 1)
-            paths = new[] { paths[0], null };
-
-        string combinedPath = paths.Aggregate((x, y) => y is null ? GetPath(x) : Path.Combine(GetPath(x), GetPath(y)))
-            .TrimStart(Path.DirectorySeparatorChar)
-            .TrimStart(Path.AltDirectorySeparatorChar)
-            .TrimEnd(Path.DirectorySeparatorChar)
-            .TrimEnd(Path.AltDirectorySeparatorChar);
-
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+    
+        string combinedPath = Path.Combine(normalizedPaths);
+        string root = Path.GetPathRoot(combinedPath) ?? string.Empty;
+    
+        string result = combinedPath.TrimEnd(
+            Path.DirectorySeparatorChar,
+            Path.AltDirectorySeparatorChar);
+    
+        if (result.Length < root.Length)
+            result = root;
+    
+        if (isDirectoryPath &&
+            !result.EndsWith(
+                Path.DirectorySeparatorChar.ToString(),
+                StringComparison.Ordinal))
         {
-            if (paths[0].Length > 1 && paths[0][1] == Path.VolumeSeparatorChar)
-                return FormattableString.Invariant($"{combinedPath}{(isDirectoryPath ? Path.DirectorySeparatorChar : null)}");
-
-            return FormattableString.Invariant($"{(Path.IsPathRooted(paths[0]) ? Path.DirectorySeparatorChar : null)}{combinedPath}{(isDirectoryPath ? Path.DirectorySeparatorChar : null)}");
+            result += Path.DirectorySeparatorChar;
         }
-
-        return FormattableString.Invariant($"{(Path.IsPathRooted(paths[0]) ? Path.DirectorySeparatorChar : null)}{combinedPath}{(isDirectoryPath ? Path.DirectorySeparatorChar : null)}");
+    
+        return result;
     }
 
     private static string GetPath(string path)
