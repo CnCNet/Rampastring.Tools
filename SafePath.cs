@@ -102,7 +102,7 @@ public static class SafePath
     /// CombineFilePath("folder",  "/file")      = "folder/file"
     /// CombineFilePath("folder/", "/file")      = "folder/file"
     /// CombineFilePath("folder/", "file")       = "folder/file"
-    /// CombineFilePath("folder1", "C:\folder2") = "folder1/C/folder2"
+    /// CombineFilePath("folder1", "C:\folder2") = "folder1/C/folder2" or "folder1/C:/folder2" depending on platform
     /// </code>
     ///
     /// The examples use "/" for readability; the result uses the platform separator ("\" on
