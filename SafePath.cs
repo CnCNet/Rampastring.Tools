@@ -135,7 +135,7 @@ public static class SafePath
         if (paths.Length == 1)
             paths = new[] { paths[0], null };
 
-        // We intend to treat later segments are names relative to the base.
+        // We intend to treat later segments relative paths, so for the Windows drive-rooted case we treat the drive letter as a name.
         for (int i = 1; i < paths.Length; i++)
             paths[i] = FoldDrivePrefix(paths[i]);
 
