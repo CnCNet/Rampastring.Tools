@@ -162,7 +162,7 @@ public static class SafePath
     private static string FoldDrivePrefix(string path)
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            return path.Replace(':', Path.DirectorySeparatorChar);
+            return path?.Replace(':', Path.DirectorySeparatorChar);
 
         return path;
     }
